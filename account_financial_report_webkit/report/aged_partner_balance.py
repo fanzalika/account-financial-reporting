@@ -206,7 +206,7 @@ class AccountAgedTrialBalanceWebkit(PartnersOpenInvoicesWebkit):
             if detailed_by_invoice:
                 invoice = line['supplier_invoice_number'] if line['supplier_invoice_number'] != None else \
                     line['invoice_number'] if line['invoice_number'] != None else line['lname']                                       
-                 
+
                 if invoice not in res_by_invoice:
                     res_by_invoice[invoice] = {
                         'aged_lines': dict.fromkeys(RANGES, 0.0),
