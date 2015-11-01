@@ -524,7 +524,8 @@ class CommonReportHeaderWebkit(common_report_header):
             i.id AS invoice_id,
             i.type AS invoice_type,
             i.number AS invoice_number,
-            l.date_maturity
+            i.supplier_invoice_number AS supplier_invoice_number,
+            l.date_maturity            
         """
 
     def _get_move_line_order(self):
