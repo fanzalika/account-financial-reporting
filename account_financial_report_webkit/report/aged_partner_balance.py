@@ -60,6 +60,8 @@ RANGES_TITLES = make_ranges_titles()
 REC_PAY_TYPE = ('purchase', 'sale')
 # list of refund payable type
 REFUND_TYPE = ('purchase_refund', 'sale_refund')
+# general is needed when transferring opening balance from other system
+GENERAL_TYPE = ('general')  
 INV_TYPE = REC_PAY_TYPE + REFUND_TYPE
 
 
@@ -342,7 +344,7 @@ class AccountAgedTrialBalanceWebkit(PartnersOpenInvoicesWebkit):
         """
         if reconcile_lookup.get(line['rec_id'], 0.0) > 1:
             return self.compute_delay_from_partial_rec
-        elif line['jtype'] in INV_TYPE and line.get('date_maturity') \
+        elif ( line['jtype'] in INV_TYPE or line['jtype'] in GENERAL_TYPE ) and line.get('date_maturity') \
                 and aging_method == 'due_date':
             return self.compute_delay_from_maturity
         else:
