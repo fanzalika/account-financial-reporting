@@ -215,7 +215,9 @@ class AccountAgedTrialBalanceWebkit(PartnersOpenInvoicesWebkit):
                     }
                 res_by_invoice[invoice][
                     'aged_lines'][classification] += amount
-
+                    
+                res_by_invoice[invoice]['ldate']=line['ldate']
+        
         if detailed_by_invoice:
             for invoice in res_by_invoice:
                 self.compute_balance(

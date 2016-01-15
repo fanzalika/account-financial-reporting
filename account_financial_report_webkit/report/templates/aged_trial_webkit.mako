@@ -108,7 +108,7 @@
                       ## partner
                       <div class="act_as_cell first_column" style="width: 60px;">${_('Partner')}</div>
                       ## code
-                      <div class="act_as_cell" style="width: 70px;">${_('Code')}</div>
+                      <div class="act_as_cell" style="width: 70px;">${_('Date')}</div>
                       ## invoice for detailed reports
                       %if acc.aged_lines_by_invoice:
                         <div class="act_as_cell" style="width: 70px;">${_('Invoice')}</div>
@@ -156,11 +156,28 @@
                                 <div class="act_as_cell classif amount"></div>
                               %endfor
                          </div>
-                         %for invoice in acc.aged_lines_by_invoice[p_id]:
-                           <%invoice_line = acc.aged_lines_by_invoice[p_id][invoice]%>
+                         
+                         <% 
+							#Convert to list and sort according to date
+							import datetime
+							ls = []
+							for invoice in acc.aged_lines_by_invoice[p_id]:
+								tmp=[invoice, acc.aged_lines_by_invoice[p_id][invoice]]
+								ls.append(tmp) 
+								
+							#Bubble sort http://danishmujeeb.com/blog/2014/01/basic-sorting-algorithms-implemented-in-python
+							for i in range(len(ls)):
+								for j in range(len(ls)-1-i):
+									if datetime.datetime.strptime(ls[j][1]['ldate'], '%Y-%m-%d') > datetime.datetime.strptime(ls[j+1][1]['ldate'], '%Y-%m-%d'):
+										ls[j], ls[j+1] = ls[j+1], ls[j] 
+                         %>
+                         
+                         %for i in range(len(ls)):
+                           <%invoice = ls[i][0]%>
+                           <%invoice_line = ls[i][1]%>
                            <div class="act_as_row lines" style="page-break-inside: avoid">
                              <div class="act_as_cell first_column"></div>
-                             <div class="act_as_cell"></div>
+                             <div class="act_as_cell">${invoice_line['ldate']}</div>
                              <div class="act_as_cell">${invoice}</div>
                              <div class="act_as_cell amount">${formatLang(invoice_line.get('balance') or 0.0) | amount}</div>
                               %for classif in ranges:
